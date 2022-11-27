@@ -30,7 +30,8 @@ public class Test extends javax.swing.JFrame {
                 String name = "Ra Ven";
                 String date = df.format(new Date());
                 String message = chatArea.getText().trim();
-                chatArea.addChatBox(new ModelMessage(icon, name, date, message), ChatBox.BoxType.LEFT);
+                chatArea.addChatBox(new ModelMessage(icon, name, date, message), ChatBox.BoxType.RIGHT);
+                chatArea.clearTextAndGrabFocus();
             }
 
             @Override
@@ -66,7 +67,7 @@ public class Test extends javax.swing.JFrame {
             background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(background1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(chatArea, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+                .addComponent(chatArea, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                 .addContainerGap())
         );
         background1Layout.setVerticalGroup(

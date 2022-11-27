@@ -32,20 +32,20 @@ import net.miginfocom.swing.MigLayout;
 import raven.chat.swing.ChatEvent;
 
 public class ChatArea extends JPanel {
-    
+
     private AnimationScroll animationScroll;
     private AnimationFloatingButton animationFloatingButton;
     private List<ChatEvent> events = new ArrayList<>();
-    
+
     public void addChatEvent(ChatEvent event) {
         events.add(event);
     }
-    
+
     public ChatArea() {
         init();
         initAnimator();
     }
-    
+
     private void init() {
         setOpaque(false);
         layout = new MigLayout("fill, wrap, inset 0", "[fill]", "[fill,40!][fill, 100%][shrink 0,::30%]");
@@ -60,7 +60,7 @@ public class ChatArea extends JPanel {
         scrollBody.getViewport().setOpaque(false);
         scrollBody.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
             private int oldValues;
-            
+
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
                 int value = scrollBody.getVerticalScrollBar().getValue();
@@ -72,7 +72,7 @@ public class ChatArea extends JPanel {
                         animationFloatingButton.show();
                     }
                 }
-                
+
             }
         });
         floatingButton = createFloatingButton();
@@ -84,12 +84,12 @@ public class ChatArea extends JPanel {
         add(layeredPane);
         add(bottom);
     }
-    
+
     private void initAnimator() {
         animationScroll = new AnimationScroll(body);
         animationFloatingButton = new AnimationFloatingButton(layoutLayered, floatingButton);
     }
-    
+
     private JPanel createHeader() {
         RoundPanel panel = new RoundPanel();
         panel.setLayout(new MigLayout("fill, inset 2"));
@@ -101,14 +101,14 @@ public class ChatArea extends JPanel {
         panel.add(labelTitle);
         return panel;
     }
-    
+
     private JPanel createBody() {
         RoundPanel panel = new RoundPanel();
         panel.setBackground(new Color(0, 0, 0, 0));
         panel.setLayout(new MigLayout("wrap,fillx"));
         return panel;
     }
-    
+
     private JPanel createBottom() {
         RoundPanel panel = new RoundPanel();
         panel.setBackground(new Color(255, 255, 255, 20));
@@ -129,7 +129,7 @@ public class ChatArea extends JPanel {
             public void keyPressed(KeyEvent e) {
                 revalidate();
             }
-            
+
             @Override
             public void keyTyped(KeyEvent ke) {
                 runEventKeyTyped(ke);
@@ -157,14 +157,14 @@ public class ChatArea extends JPanel {
         panel.add(cmdSend, "height 34!");
         return panel;
     }
-    
+
     private JLayeredPane createLayeredPane() {
         JLayeredPane layer = new JLayeredPane();
         layoutLayered = new MigLayout("fill,inset 0", "[fill]", "[fill]");
         layer.setLayout(layoutLayered);
         return layer;
     }
-    
+
     private Button createFloatingButton() {
         Button button = new Button();
         button.setBorder(null);
@@ -181,14 +181,14 @@ public class ChatArea extends JPanel {
         });
         return button;
     }
-    
+
     private JScrollPane createScroll() {
         JScrollPane scroll = new JScrollPane();
         scroll.setBorder(null);
         scroll.setViewportBorder(null);
         return scroll;
     }
-    
+
     public void addChatBox(ModelMessage message, ChatBox.BoxType type) {
         int values = scrollBody.getVerticalScrollBar().getValue();
         if (type == ChatBox.BoxType.LEFT) {
@@ -201,7 +201,6 @@ public class ChatArea extends JPanel {
             public void run() {
                 body.revalidate();
                 scrollBody.getVerticalScrollBar().setValue(values);
-                textMessage.setText("");
                 bottom.revalidate();
             }
         });
@@ -210,47 +209,60 @@ public class ChatArea extends JPanel {
         scrollBody.revalidate();
         scrollToBottom();
     }
-    
+
     public void clearChatBox() {
         body.removeAll();
         body.repaint();
         body.revalidate();
     }
-    
+
     private void scrollToBottom() {
         animationScroll.scrollVertical(scrollBody, scrollBody.getVerticalScrollBar().getMaximum());
     }
-    
+
     private void runEventMousePressedSendButton(ActionEvent evt) {
         for (ChatEvent event : events) {
             event.mousePressedSendButton(evt);
         }
     }
-    
+
     private void runEventMousePressedFileButton(ActionEvent evt) {
         for (ChatEvent event : events) {
             event.mousePressedFileButton(evt);
         }
     }
-    
+
     private void runEventKeyTyped(KeyEvent evt) {
         for (ChatEvent event : events) {
             event.keyTyped(evt);
         }
     }
-    
+
     public String getText() {
         return textMessage.getText();
     }
-    
+
     public void setTitle(String title) {
         labelTitle.setText(title);
     }
-    
+
     public String getTitle() {
         return labelTitle.getText();
     }
-    
+
+    public void setText(String text) {
+        textMessage.setText(text);
+    }
+
+    public void textGrabFocus() {
+        textMessage.grabFocus();
+    }
+
+    public void clearTextAndGrabFocus() {
+        textMessage.setText("");
+        textMessage.grabFocus();
+    }
+
     private MigLayout layout;
     private MigLayout layoutLayered;
     private JLayeredPane layeredPane;
